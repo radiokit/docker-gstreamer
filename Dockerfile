@@ -39,7 +39,7 @@ RUN git clone git://anongit.freedesktop.org/git/gstreamer/gstreamer && \
   make -j`nproc` && \
   make install && \
   cd .. \
-  rm -rf gstreamer
+  rm -rf /gstreamer
 
 # Fetch and build gst-plugins-base
 RUN git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-base && \
@@ -68,7 +68,7 @@ RUN git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-base && \
   make -j`nproc` && \
   make install && \
   cd .. \
-  rm -rf gst-plugins-base
+  rm -rf /gst-plugins-base
 
 # Fetch and build gst-plugins-good
 RUN git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-good && \
@@ -125,7 +125,7 @@ RUN git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-good && \
   make -j`nproc` && \
   make install && \
   cd .. \
-  rm -rf gst-plugins-good
+  rm -rf /gst-plugins-good
 
 # Fetch and build gst-plugins-bad
 RUN git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-bad && \
@@ -270,7 +270,7 @@ RUN git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-bad && \
   make -j`nproc` && \
   make install && \
   cd .. \
-  rm -rf gst-plugins-bad
+  rm -rf /gst-plugins-bad
 
 # Fetch and build gst-plugins-ugly
 RUN git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-ugly && \
@@ -293,7 +293,7 @@ RUN git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-ugly && \
   make -j`nproc` && \
   make install && \
   cd .. \
-  rm -rf gst-plugins-ugly
+  rm -rf /gst-plugins-ugly
 
 # Do some cleanup
 RUN DEBIAN_FRONTEND=noninteractive  apt-get clean && \
