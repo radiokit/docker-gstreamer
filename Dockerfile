@@ -38,8 +38,8 @@ RUN git clone git://anongit.freedesktop.org/git/gstreamer/gstreamer && \
   ./autogen.sh --prefix=/usr --disable-gtk-doc && \
   make -j`nproc` && \
   make install && \
-  cd .. \
-  rm -rf /gstreamer
+  cd .. && \
+  rm -rvf /gstreamer
 
 # Fetch and build gst-plugins-base
 RUN git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-base && \
@@ -67,8 +67,8 @@ RUN git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-base && \
     --disable-theora && \
   make -j`nproc` && \
   make install && \
-  cd .. \
-  rm -rf /gst-plugins-base
+  cd .. && \
+  rm -rvf /gst-plugins-base
 
 # Fetch and build gst-plugins-good
 RUN git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-good && \
@@ -124,8 +124,8 @@ RUN git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-good && \
     --disable-vpx && \
   make -j`nproc` && \
   make install && \
-  cd .. \
-  rm -rf /gst-plugins-good
+  cd .. && \
+  rm -rvf /gst-plugins-good
 
 # Fetch and build gst-plugins-bad
 RUN git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-bad && \
@@ -269,8 +269,8 @@ RUN git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-bad && \
     --disable-webrtcdsp && \
   make -j`nproc` && \
   make install && \
-  cd .. \
-  rm -rf /gst-plugins-bad
+  cd .. && \
+  rm -rvf /gst-plugins-bad
 
 # Fetch and build gst-plugins-ugly
 RUN git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-ugly && \
@@ -292,8 +292,8 @@ RUN git clone git://anongit.freedesktop.org/git/gstreamer/gst-plugins-ugly && \
     --disable-x264 && \
   make -j`nproc` && \
   make install && \
-  cd .. \
-  rm -rf /gst-plugins-ugly
+  cd .. && \
+  rm -rvf /gst-plugins-ugly
 
 # Do some cleanup
 RUN DEBIAN_FRONTEND=noninteractive  apt-get clean && \
