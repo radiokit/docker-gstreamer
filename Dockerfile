@@ -1,6 +1,6 @@
 FROM ubuntu:xenial
 
-ARG GST_VERSION=1.12.0
+ARG GST_VERSION=1.12.1
 
 RUN apt-get -y update
 
