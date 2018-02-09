@@ -28,7 +28,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
   libmp3lame-dev \
   libsoup2.4-dev \
   libshout3-dev \
-  libpulse-dev
+  libpulse-dev \
+  libva-dev
 
 
 # Fetch and build GStreamer
