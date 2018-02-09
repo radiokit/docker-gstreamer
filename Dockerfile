@@ -84,6 +84,39 @@ RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstrea
   make install && \
   cd .. && \
   rm -rvf /gst-plugins-ugly
+  
+# Fetch and build gst-libav
+RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstreamer/gst-libav && \
+  cd gst-libav && \
+  git checkout $GST_VERSION && \
+  ./autogen.sh \
+    --disable-gtk-doc && \
+  make -j`nproc` && \
+  make install && \
+  cd .. && \
+  rm -rvf /gst-libav
+  
+# Fetch and build gst-rtsp-server
+RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstreamer/gst-rtsp-server && \
+  cd gst-rtsp-server && \
+  git checkout $GST_VERSION && \
+  ./autogen.sh \
+    --disable-gtk-doc && \
+  make -j`nproc` && \
+  make install && \
+  cd .. && \
+  rm -rvf /gst-rtsp-server
+  
+# Fetch and build gstreamer-vaapi
+RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstreamer/gstreamer-vaapi && \
+  cd gstreamer-vaapi && \
+  git checkout $GST_VERSION && \
+  ./autogen.sh \
+    --disable-gtk-doc && \
+  make -j`nproc` && \
+  make install && \
+  cd .. && \
+  rm -rvf /gstreamer-vaapi
 
 # Do some cleanup
 RUN DEBIAN_FRONTEND=noninteractive  apt-get clean && \
