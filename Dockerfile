@@ -36,7 +36,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstreamer/gstreamer && \
   cd gstreamer && \
   git checkout $GST_VERSION && \
-  ./autogen.sh --disable-gtk-doc && \
+  ./autogen.sh --prefix=/usr --disable-gtk-doc && \
   make -j`nproc` && \
   make install && \
   cd .. && \
@@ -58,6 +58,7 @@ RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstrea
   cd gst-plugins-good && \
   git checkout $GST_VERSION && \
   ./autogen.sh \
+  	--prefix=/usr \
     --disable-gtk-doc && \
   make -j`nproc` && \
   make install && \
@@ -69,6 +70,7 @@ RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstrea
   cd gst-plugins-bad && \
   git checkout $GST_VERSION && \
   ./autogen.sh \
+  	--prefix=/usr \
     --disable-gtk-doc && \
   make -j`nproc` && \
   make install && \
@@ -80,6 +82,7 @@ RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstrea
   cd gst-plugins-ugly && \
   git checkout $GST_VERSION && \
   ./autogen.sh \
+  	--prefix=/usr \
     --disable-gtk-doc && \
   make -j`nproc` && \
   make install && \
@@ -91,6 +94,7 @@ RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstrea
   cd gst-libav && \
   git checkout $GST_VERSION && \
   ./autogen.sh \
+  	--prefix=/usr \
     --disable-gtk-doc && \
   make -j`nproc` && \
   make install && \
@@ -102,6 +106,7 @@ RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstrea
   cd gst-rtsp-server && \
   git checkout $GST_VERSION && \
   ./autogen.sh \
+  	--prefix=/usr \
     --disable-gtk-doc && \
   make -j`nproc` && \
   make install && \
@@ -113,6 +118,7 @@ RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstrea
   cd gstreamer-vaapi && \
   git checkout $GST_VERSION && \
   ./autogen.sh \
+  	--prefix=/usr \
     --disable-gtk-doc && \
   make -j`nproc` && \
   make install && \
