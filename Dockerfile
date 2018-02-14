@@ -21,6 +21,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 # Install dependencies necessary to build our custom GStreamer build
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
   libglib2.0-dev \
+  libgirepository1.0-dev \
   libpthread-stubs0-dev \
   libssl-dev \
   liborc-dev \
