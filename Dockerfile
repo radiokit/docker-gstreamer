@@ -1,10 +1,10 @@
-FROM ubuntu:xenial
+FROM ubuntu:rolling
 
 ARG GST_VERSION=1.12.4
 
 RUN apt-get -y update
 
-# Install compiler etc.
+# Install dependencies
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
   autoconf \
   automake \
@@ -16,11 +16,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
   nasm \
   git-core \
   build-essential \
-  gettext
-
-# Install dependencies necessary to build our custom GStreamer build
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
+  gettext \
+  meson \
   libglib2.0-dev \
+  libgirepository1.0-dev \
   libpthread-stubs0-dev \
   libssl-dev \
   liborc-dev \
@@ -28,8 +27,62 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
   libmp3lame-dev \
   libsoup2.4-dev \
   libshout3-dev \
-  libpulse-dev
-
+  libpulse-dev \
+  libva-dev \
+  libxv-dev \
+  libalsa-ocaml-dev \
+  libcdparanoia-dev \
+  libopus-dev \
+  libpango1.0-dev \
+  libvisual-0.4-dev \
+  libvorbisidec-dev \
+  libaa1-dev \
+  libcaca-dev \
+  libdv4-dev \
+  libflac-dev \
+  libjack-dev \
+  libtag1-dev \
+  libdrm-dev \
+  libvpx-dev \
+  libwavpack-dev \
+  libass-dev \
+  libzbar-dev \
+  libx265-dev \
+  libx264-dev \
+  libwildmidi-dev \
+  libvulkan-dev \
+  libwayland-dev \
+  wayland-protocols \
+  libwebp-dev \
+  libwebrtc-audio-processing-dev \
+  libvdpau-dev \
+  libsrtp0-dev \
+  libvo-aacenc-dev \
+  libvo-amrwbenc-dev \
+  libbs2b-dev \
+  libdc1394-22-dev \
+  libdts-dev \
+  libfaac-dev \
+  libfaad-dev \
+  libfdk-aac-dev \
+  libfluidsynth-dev \
+  libcurl-ocaml-dev \
+  libgme-dev \
+  libgsm1-dev \
+  librtmp-dev \
+  libcurl-ocaml-dev \
+  libjpeg-turbo8-dev \
+  liba52-0.7.4-dev \
+  libcdio-dev \
+  libtwolame-dev \
+  libx264-dev \
+  libmpeg2-4-dev \
+  libsidplay1-dev \
+  gobject-introspection \
+  libudev-dev \
+  python3-pip \
+  python3-gi \
+  python-gi-dev
 
 # Fetch and build GStreamer
 RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstreamer/gstreamer && \
@@ -46,25 +99,7 @@ RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstrea
   cd gst-plugins-base && \
   git checkout $GST_VERSION && \
   ./autogen.sh --prefix=/usr \
-    --disable-gtk-doc \
-    --disable-adder \
-    --disable-app \
-    --disable-videoconvert \
-    --disable-gio \
-    --disable-subparse \
-    --disable-tcp \
-    --disable-videotestsrc \
-    --disable-videorate \
-    --disable-videoscale \
-    --disable-x \
-    --disable-xvideo \
-    --disable-xshm \
-    --disable-alsa \
-    --disable-cdparanoia \
-    --disable-ivorbis \
-    --disable-libvisual \
-    --disable-pango \
-    --disable-theora && \
+    --disable-gtk-doc && \
   make -j`nproc` && \
   make install && \
   cd .. && \
@@ -74,54 +109,9 @@ RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstrea
 RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstreamer/gst-plugins-good && \
   cd gst-plugins-good && \
   git checkout $GST_VERSION && \
-  ./autogen.sh --prefix=/usr \
-    --disable-gtk-doc \
-    --disable-alpha \
-    --disable-avi \
-    --disable-deinterlace \
-    --disable-dtmf \
-    --disable-effectv \
-    --disable-flv \
-    --disable-flx \
-    --disable-goom \
-    --disable-goom2k1 \
-    --disable-imagefreeze \
-    --disable-interleave \
-    --disable-isomp4 \
-    --disable-matroska \
-    --disable-monoscope \
-    --disable-rtp \
-    --disable-rtpmanager \
-    --disable-rtsp \
-    --disable-shapewipe \
-    --disable-smpte \
-    --disable-udp \
-    --disable-videobox \
-    --disable-videocrop \
-    --disable-videofilter \
-    --disable-videomixer \
-    --disable-y4m \
-    --disable-directsound \
-    --disable-waveform \
-    --disable-oss \
-    --disable-oss4 \
-    --disable-sunaudio \
-    --disable-osx_audio \
-    --disable-osx_video \
-    --disable-gst_v4l2 \
-    --disable-x \
-    --disable-aalib \
-    --disable-aalibtest \
-    --disable-cairo \
-    --disable-flac \
-    --disable-gdk_pixbuf \
-    --disable-jack \
-    --disable-jpeg \
-    --disable-libcaca \
-    --disable-libdv \
-    --disable-libpng \
-    --disable-dv1394 \
-    --disable-vpx && \
+  ./autogen.sh \
+  	--prefix=/usr \
+    --disable-gtk-doc && \
   make -j`nproc` && \
   make install && \
   cd .. && \
@@ -131,142 +121,9 @@ RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstrea
 RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstreamer/gst-plugins-bad && \
   cd gst-plugins-bad && \
   git checkout $GST_VERSION && \
-  ./autogen.sh --prefix=/usr \
-    --disable-gtk-doc \
-    --disable-accurip \
-    --disable-adpcmdec \
-    --disable-adpcmenc \
-    --disable-aiff \
-    --disable-videoframe_audiolevel \
-    --disable-asfmux \
-    --disable-compositor \
-    --disable-bayer \
-    --disable-camerabin2 \
-    --disable-coloreffects \
-    --disable-dvbsuboverlay \
-    --disable-dvdspu \
-    --disable-faceoverlay \
-    --disable-festival \
-    --disable-fieldanalysis \
-    --disable-freeverb \
-    --disable-frei0r \
-    --disable-gaudieffects \
-    --disable-geometrictransform \
-    --disable-gdp \
-    --disable-inter \
-    --disable-interlace \
-    --disable-ivfparse \
-    --disable-ivtc \
-    --disable-jp2kdecimator \
-    --disable-jpegformat \
-    --disable-librfb \
-    --disable-midi \
-    --disable-mpegdemux \
-    --disable-mpegtsdemux \
-    --disable-mpegtsmux \
-    --disable-mpegpsmux \
-    --disable-mxf \
-    --disable-netsim \
-    --disable-onvif \
-    --disable-pcapparse \
-    --disable-pnm \
-    --disable-rawparse \
-    --disable-sdp \
-    --disable-siren \
-    --disable-smooth \
-    --disable-speed \
-    --disable-subenc \
-    --disable-timecode \
-    --disable-videofilters \
-    --disable-videoparsers \
-    --disable-videosignal \
-    --disable-vmnc \
-    --disable-y4m \
-    --disable-yadif \
-    --disable-directsound \
-    --disable-wasapi \
-    --disable-direct3d \
-    --disable-winscreencap \
-    --disable-winks \
-    --disable-android_media \
-    --disable-apple_media \
-    --disable-bluez \
-    --disable-avc \
-    --disable-shm \
-    --disable-vcd \
-    --disable-opensles \
-    --disable-uvch264 \
-    --disable-nvenc \
-    --disable-tinyalsa \
-    --disable-msdk \
-    --disable-assrender \
-    --disable-voamrwbenc \
-    --disable-voaacenc \
-    --disable-bs2b \
-    --disable-bz2 \
-    --disable-chromaprint \
-    --disable-curl \
-    --disable-dash \
-    --disable-dc1394 \
-    --disable-decklink \
-    --disable-directfb \
-    --disable-wayland \
-    --disable-webp \
-    --disable-daala \
-    --disable-dts \
-    --disable-resindvd \
-    --disable-faac \
-    --disable-faad \
-    --disable-fbdev \
-    --disable-fdk_aac \
-    --disable-flite \
-    --disable-gsm \
-    --disable-fluidsynth \
-    --disable-kate \
-    --disable-kms \
-    --disable-ladspa \
-    --disable-lv2 \
-    --disable-libde265 \
-    --disable-libmms \
-    --disable-srtp \
-    --disable-dtls \
-    --disable-ttml \
-    --disable-modplug \
-    --disable-mpeg2enc \
-    --disable-mplex \
-    --disable-musepack \
-    --disable-neon \
-    --disable-ofa \
-    --disable-openal \
-    --disable-opencv \
-    --disable-openexr \
-    --disable-openh264 \
-    --disable-openjpeg \
-    --disable-openmpt \
-    --disable-openni2 \
-    --disable-rsvg \
-    --disable-gl \
-    --disable-gtk3 \
-    --disable-qt \
-    --disable-vulkan \
-    --disable-teletextdec \
-    --disable-wildmidi \
-    --disable-smoothstreaming \
-    --disable-sndfile \
-    --disable-soundtouch \
-    --disable-spc \
-    --disable-gme \
-    --disable-dvb \
-    --disable-acm \
-    --disable-vdpau \
-    --disable-sbc \
-    --disable-schro \
-    --disable-zbar \
-    --disable-rtmp \
-    --disable-spandsp \
-    --disable-hls \
-    --disable-x265 \
-    --disable-webrtcdsp && \
+  ./autogen.sh \
+  	--prefix=/usr \
+    --disable-gtk-doc && \
   make -j`nproc` && \
   make install && \
   cd .. && \
@@ -276,24 +133,59 @@ RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstrea
 RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstreamer/gst-plugins-ugly && \
   cd gst-plugins-ugly && \
   git checkout $GST_VERSION && \
-  ./autogen.sh --prefix=/usr \
-    --disable-gtk-doc \
-    --disable-asfdemux \
-    --disable-dvdlpcmdec \
-    --disable-dvdsub \
-    --disable-xingmux \
-    --disable-realmedia \
-    --disable-a52dec \
-    --disable-amrnb \
-    --disable-amrwb \
-    --disable-cdio \
-    --disable-dvdread \
-    --disable-sidplay \
-    --disable-x264 && \
+  ./autogen.sh \
+  	--prefix=/usr \
+    --disable-gtk-doc && \
   make -j`nproc` && \
   make install && \
   cd .. && \
   rm -rvf /gst-plugins-ugly
+  
+# Fetch and build gst-libav
+RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstreamer/gst-libav && \
+  cd gst-libav && \
+  git checkout $GST_VERSION && \
+  ./autogen.sh \
+  	--prefix=/usr \
+    --disable-gtk-doc && \
+  make -j`nproc` && \
+  make install && \
+  cd .. && \
+  rm -rvf /gst-libav
+  
+# Fetch and build gst-rtsp-server
+RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstreamer/gst-rtsp-server && \
+  cd gst-rtsp-server && \
+  git checkout $GST_VERSION && \
+  ./autogen.sh \
+  	--prefix=/usr \
+    --disable-gtk-doc && \
+  make -j`nproc` && \
+  make install && \
+  cd .. && \
+  rm -rvf /gst-rtsp-server
+  
+# Fetch and build gstreamer-vaapi
+RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstreamer/gstreamer-vaapi && \
+  cd gstreamer-vaapi && \
+  git checkout $GST_VERSION && \
+  ./autogen.sh \
+  	--prefix=/usr \
+  	--disable-x11 \
+    --disable-gtk-doc && \
+  make -j`nproc` && \
+  make install && \
+  cd .. && \
+  rm -rvf /gstreamer-vaapi
+  
+# Fetch and build gst-python
+RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstreamer/gst-python && \
+  cd gst-python && \
+  git checkout $GST_VERSION && \
+  meson build --prefix=/usr --buildtype=release && \
+  ninja -C build -j `nproc` && \
+  cd .. && \
+  rm -rvf /gst-python
 
 # Do some cleanup
 RUN DEBIAN_FRONTEND=noninteractive  apt-get clean && \
