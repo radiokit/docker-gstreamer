@@ -4,7 +4,7 @@ ARG GST_VERSION=1.14.0
 
 RUN apt-get -y update
 
-# Install compiler etc.
+# Install dependencies
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
   autoconf \
   automake \
@@ -16,10 +16,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
   nasm \
   git-core \
   build-essential \
-  gettext
-
-# Install dependencies necessary to build our custom GStreamer build
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
+  gettext \
+  meson \
   libglib2.0-dev \
   libgirepository1.0-dev \
   libpthread-stubs0-dev \
@@ -81,7 +79,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
   libmpeg2-4-dev \
   libsidplay1-dev \
   gobject-introspection \
-  libudev-dev 
+  libudev-dev \
+  python3-pip \
+  python3-gi \
+  python-gi-dev
 
 # Fetch and build GStreamer
 RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstreamer/gstreamer && \
@@ -176,6 +177,15 @@ RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstrea
   make install && \
   cd .. && \
   rm -rvf /gstreamer-vaapi
+  
+# Fetch and build gst-python
+RUN git clone -b $GST_VERSION --depth 1 git://anongit.freedesktop.org/git/gstreamer/gst-python && \
+  cd gst-python && \
+  git checkout $GST_VERSION && \
+  meson build --prefix=/usr --buildtype=release && \
+  ninja -C build -j `nproc` && \
+  cd .. && \
+  rm -rvf /gst-python
 
 # Do some cleanup
 RUN DEBIAN_FRONTEND=noninteractive  apt-get clean && \
